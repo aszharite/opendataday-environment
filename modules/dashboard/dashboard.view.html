@@ -1,0 +1,14 @@
+<section ng-controller="DashboardCtrl as dVM" layout="column" layout-fill>
+    <div layout="row" style="height: 150px">
+        <div ng-repeat="environment in dVM.data.environments" flex>
+            <div class="icon-container"
+                 ng-include="'modules/dashboard/assets/icons/icon_' + environment.id + '.svg'"
+                 ng-style="{ 'fill': environment.data.level }"></div>
+            <div>{{ environment.data.value }}</div>
+        </div>
+    </div>
+
+    <div flex>
+
+    </div>
+</section>

@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" href="node_modules/angular-material/angular-material.css">
     <link rel="stylesheet" href="common/components/app-loader/app-loader.style.css">
+    <link rel="stylesheet" href="modules/dashboard/dashboard.style.css">
 
     <!-- js -->
     <script type="text/javascript" src="node_modules/angular/angular.js"></script>
@@ -24,10 +25,13 @@
     <script type="text/javascript" src="node_modules/angular-ui-router/release/angular-ui-router.js"></script>
 </head>
 <body ng-cloak>
-    <section layout="column">
-        <div flex-gt-sm ui-view></div>
+    <section layout="column" layout-fill>
+        <div flex-gt-sm ui-view layout-fill></div>
     </section>
 
     <script type="text/javascript" src="app.js"></script>
+    <script type="text/javascript" src="common/components/app-loader/app-loader.directive.js"></script>
+    <script type="text/javascript" src="modules/dashboard/dashboard.route.js"></script>
+    <script type="text/javascript" src="modules/dashboard/dashboard.controller.js"></script>
 </body>
 </html>
