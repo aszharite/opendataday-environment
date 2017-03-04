@@ -1,5 +1,29 @@
 .icon-container,
 .icon-container svg {
     width: auto;
-    height: 100%;
+    height: calc(100% - 2em);
+}
+
+.icon-label {
+    font-weight: bold;
+    font-size: 2em;
+}
+
+md-card {
+    outline: none;
+    margin-bottom: 0;
+
+    box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.2), 0px 0px 1px 0px rgba(0, 0, 0, 0.14), 0px 0px 1px 0px rgba(0, 0, 0, 0.12);
+}
+md-card.active {
+
+}
+md-card:not(.active) {
+    box-shadow: none;
+    background: transparent;
+}
+
+.indicators {
+    height: calc(100% - 208px);
+    margin-top: 0;
 }
