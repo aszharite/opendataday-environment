@@ -5,9 +5,11 @@
         .module('app')
         .controller('DashboardCtrl', DashboardCtrl);
 
-    DashboardCtrl.$inject = [];
+    DashboardCtrl.$inject = [
+        '$http', '$q'
+    ];
 
-    function DashboardCtrl() {
+    function DashboardCtrl($http, $q) {
         var self = this;
 
         function setAirEnvironment(data) {
@@ -52,7 +54,6 @@
             var SO2LevelEnum = [];
             var NO2LevelEnum = [];
 
-
             var AQILevel = null;
             AQILevelEnum.forEach(function(level) {
                 if(level.min <= data.aqi && level.max >= data.aqi) {
@@ -72,9 +73,27 @@
             }
         }
 
+        self.actions = {};
+        self.actions.setActiveEnvironment = setActiveEnvironment;
+
+        function setActiveEnvironment(environment) {
+            self.data.selectedEnvironment = environment;
+        }
+
+        self.watchers = {};
+        self.watchers.isActiveEnvironment = isActiveEnvironment;
+
+        function isActiveEnvironment(environment) {
+            return self.data.selectedEnvironment.id == environment.id;
+        }
+
         //region init
         self.$onInit = function() {
             self.data = {};
+            self.loading = {};
+
+            self.loading.page = true;
+            self.data.environments = [];
             // self.data.environments = [{
             //     id: 'air',
             // }, {
@@ -89,13 +108,21 @@
             //     id: 'biome'
             // }];
 
-            self.data.environments = [];
-            self.data.environments[0] = setAirEnvironment({
-                'aqi': 10,
-                'o3': 0,
-                'no2': 0,
-                'so2': 0
-            });
+            var queries = [];
+
+            queries.push($http.get('http://api.waqi.info/feed/here/?token=f61c3feb0506d4e261547951c28f7cae3fa1fcc7'));
+
+            $q.allSettled(queries)
+                .then(function (response) {
+                    var getAirData = response[0];
+
+                    self.data.environments[0] = getAirData && getAirData.status == 200 ? setAirEnvironment(getAirData.data.data) : null;
+                    self.data.environments[1] = [];
+                })
+                .then(function() {
+                    setActiveEnvironment(self.data.environments[0]);
+                    self.loading.page = false;
+                });
         };
         //endregion
     }

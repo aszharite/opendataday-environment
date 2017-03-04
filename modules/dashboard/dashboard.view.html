@@ -1,14 +1,24 @@
-<section ng-controller="DashboardCtrl as dVM" layout="column" layout-fill>
-    <div layout="row" style="height: 150px">
-        <div ng-repeat="environment in dVM.data.environments" flex>
+<section ng-controller="DashboardCtrl as dVM" layout="column" layout-fill layout-wrap app-loader="dVM.loading.page">
+    <div layout="row" style="height: 200px">
+        <md-card flex
+                 ng-repeat="environment in dVM.data.environments"
+                 ng-click="dVM.actions.setActiveEnvironment(environment)"
+                 ng-class="{ 'active': dVM.watchers.isActiveEnvironment(environment) }">
+
             <div class="icon-container"
+                 layout="row" layout-align="center center"
                  ng-include="'modules/dashboard/assets/icons/icon_' + environment.id + '.svg'"
                  ng-style="{ 'fill': environment.data.level }"></div>
-            <div>{{ environment.data.value }}</div>
-        </div>
+            <div class="icon-label"
+                 layout="row" layout-align="center center"
+                 ng-style="{ 'color': environment.data.level }">
+                {{ environment.data.value }}
+            </div>
+
+        </md-card>
     </div>
 
-    <div flex>
+    <md-card class="indicators active" flex>
 
-    </div>
+    </md-card>
 </section>
