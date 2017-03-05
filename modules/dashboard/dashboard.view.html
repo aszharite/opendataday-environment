@@ -10,15 +10,49 @@
                  ng-include="'modules/dashboard/assets/icons/icon_' + environment.id + '.svg'"
                  ng-style="{ 'fill': environment.data.level }"></div>
             <div class="icon-label"
-                 layout="row" layout-align="center center"
+                 layout="row" layout-align="center end"
                  ng-style="{ 'color': environment.data.level }">
                 {{ environment.data.value }}
+                <small ng-if="environment.data.measurement" class="md-subhead">
+                    ({{ environment.data.measurement }})
+                    <md-icon class="info-icon" ng-if="environment.data.description"> info <md-tooltip> {{ environment.data.description }} </md-tooltip> </md-icon>
+                </small>
             </div>
 
         </md-card>
     </div>
 
     <md-card class="indicators active" flex>
+        <div layout="column" ng-if="dVM.data.selectedEnvironment.indicators.length">
+            <div layout="row" layout-align="center center" layout-margin>
+                Indicators
+            </div>
+            <div layout="row">
+                <div flex layout="column" layout-align="center center" layout-margin
+                     ng-repeat="indicator in dVM.data.selectedEnvironment.indicators" ng-style="{ 'color': indicator.level }">
+                    <div class="icon-title">
+                        {{ indicator.id }}
+                    </div>
+                    <div class="icon-label">
+                        {{ indicator.value }}
+                        <small ng-if="indicator.measurement" class="md-subhead">
+                            ({{ indicator.measurement }})
+                            <md-icon class="info-icon" ng-if="indicator.description"> info <md-tooltip> {{ indicator.description }} </md-tooltip> </md-icon>
+                        </small>
+                    </div>
+                </div>
+            </div>
+        </div>
 
+        <md-grid-list ng-if="dVM.data.selectedEnvironment.improvements.length" flex md-cols="3" md-gutter="1em" md-row-height="200">
+            <md-grid-tile ng-repeat="improvement in dVM.data.selectedEnvironment.improvements">
+                <div class="improvement-item" layout="column" layout-align="start center" layout-fill>
+                    <img src="{{ improvement.id + '.png'}}" />
+                    <div class="improvement-description" layout-margin>{{ improvement.description }}</div>
+                </div>
+            </md-grid-tile>
+        </md-grid-list>
+
+        <!--<iframe height="150" ng-src="modules/dashboard/dashboard.map.view.html"></iframe>-->
     </md-card>
 </section>

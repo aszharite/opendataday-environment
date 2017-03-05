@@ -8,6 +8,10 @@
     font-weight: bold;
     font-size: 2em;
 }
+.icon-title {
+    font-weight: bold;
+    font-size: 4em;
+}
 
 md-card {
     outline: none;
@@ -26,4 +30,22 @@ md-card:not(.active) {
 .indicators {
     height: calc(100% - 208px);
     margin-top: 0;
+}
+
+md-icon,
+.material-icons {
+    width: 20px;
+    height: 20px;
+    min-height: 20px;
+    min-width: 20px;
+    font-size: 1em;
+    cursor: pointer;
+}
+
+.improvement-item img {
+    height: 100px;
+    width: 100px;
+}
+.improvement-description {
+    text-align: center;
 }
