@@ -49,3 +49,7 @@ md-icon,
 .improvement-description {
     text-align: center;
 }
+
+md-grid-list {
+    overflow: auto;
+}

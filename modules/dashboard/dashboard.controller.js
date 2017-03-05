@@ -12,7 +12,22 @@
     function DashboardCtrl($http, $q) {
         var self = this;
 
+        function getRandomArbitrary(min, max) {
+            return Math.random() * (max - min) + min;
+        }
+        function getRandomInt(min, max) {
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+        }
+
         function setAirEnvironment(data) {
+            var aqi = data.aqi;
+            // var o3 = data.iaqi.o3.v;
+            // var no2 = data.iaqi.no2.v;
+            // var so2 = data.iaqi.so2.v;
+            var o3 = getRandomInt(0, 500);
+            var no2 = getRandomInt(0, 60);
+            var so2 = getRandomInt(0, 14000);
+
             var AQILevelEnum = [{
                 min: 0,
                 max: 50,
@@ -164,25 +179,25 @@
 
             var AQILevel = null;
             AQILevelEnum.forEach(function(level) {
-                if(level.min < data.aqi && level.max >= data.aqi) {
+                if(level.min < aqi && level.max >= aqi) {
                     AQILevel = angular.copy(level);
                 }
             });
             var O3Level = null;
             O3LevelEnum.forEach(function(level) {
-                if(level.min < data.iaqi.o3.v && level.max >= data.iaqi.o3.v) {
+                if(level.min < o3 && level.max >= o3) {
                     O3Level = angular.copy(level);
                 }
             });
             var NO2Level = null;
             NO2LevelEnum.forEach(function(level) {
-                if(level.min < data.iaqi.no2.v && level.max >= data.iaqi.no2.v) {
+                if(level.min < no2 && level.max >= no2) {
                     NO2Level = angular.copy(level);
                 }
             });
             var SO2Level = null;
             SO2LevelEnum.forEach(function(level) {
-                if(level.min < data.iaqi.so2.v && level.max >= data.iaqi.so2.v) {
+                if(level.min < so2 && level.max >= so2) {
                     SO2Level = angular.copy(level);
                 }
             });
@@ -190,7 +205,7 @@
             var indicators = [];
             indicators.push({
                 id: 'O3',
-                value: data.iaqi.o3.v,
+                value: o3,
                 level: O3Level.level,
                 label: O3Level.label,
                 description: O3Level.description,
@@ -198,7 +213,7 @@
             });
             indicators.push({
                 id: 'NO2',
-                value: data.iaqi.no2.v,
+                value: no2,
                 level: NO2Level.level,
                 label: NO2Level.label,
                 description: NO2Level.description,
@@ -206,7 +221,7 @@
             });
             indicators.push({
                 id: 'SO2',
-                value: data.iaqi.so2.v,
+                value: so2,
                 level: SO2Level.level,
                 label: SO2Level.label,
                 description: SO2Level.description,
@@ -242,7 +257,7 @@
             return {
                 id: 'air',
                 data: {
-                    value: data.aqi,
+                    value: aqi,
                     level: AQILevel.level,
                     label: AQILevel.label,
                     description: AQILevel.description,
@@ -253,37 +268,285 @@
             }
         }
         function setWaterEnvironment(data) {
+            var PHLevelEnum = [{
+                min: Number.MIN_VALUE,
+                max: 3.5,
+                level: 'red',
+                label: 'Ultra acidic',
+                description: 'Ultra acidic'
+            }, {
+                min: 3.5,
+                max: 4.5,
+                level: 'red',
+                label: 'Extremely acidic',
+                description: 'Extremely acidic'
+            }, {
+                min: 4.5,
+                max: 5,
+                level: 'red',
+                label: 'Very strongly acidic',
+                description: 'Very strongly acidic'
+            }, {
+                min: 5,
+                max: 5.5,
+                level: 'red',
+                label: 'Strongly acidic',
+                description: 'Strongly acidic'
+            }, {
+                min: 5.5,
+                max: 6,
+                level: 'orange',
+                label: 'Moderately acidic',
+                description: 'Moderately acidic'
+            }, {
+                min: 6,
+                max: 6.5,
+                level: 'orange',
+                label: 'Slightly acidic',
+                description: 'Slightly acidic'
+            }, {
+                min: 6.5,
+                max: 7.3,
+                level: 'green',
+                label: 'Neutral',
+                description: 'Neutral'
+            }, {
+                min: 7.3,
+                max: 7.8,
+                level: 'orange',
+                label: 'Slightly alkaline',
+                description: 'Slightly alkaline'
+            }, {
+                min: 7.8,
+                max: 8.4,
+                level: 'orange',
+                label: 'Moderately alkaline',
+                description: 'Moderately alkaline'
+            }, {
+                min: 8.4,
+                max: 9,
+                level: 'red',
+                label: 'Strongly alkaline',
+                description: 'Strongly alkaline'
+            }, {
+                min: 9,
+                max: Number.MAX_VALUE,
+                level: 'red',
+                label: 'Very strongly alkaline',
+                description: 'Very strongly alkaline'
+            }];
+
+            var PHLevel = null;
+            PHLevelEnum.forEach(function(level) {
+                if(level.min < data.ph && level.max >= data.ph) {
+                    PHLevel = angular.copy(level);
+                }
+            });
+
             return {
                 id: 'water',
-                data: {},
+                data: {
+                    value: data.ph,
+                    level: PHLevel.level,
+                    label: PHLevel.label,
+                    description: PHLevel.description,
+                    measurement: 'Ph'
+                },
                 indicators: []
             }
         }
         function setGarbageEnvironment(data) {
+            var garbage = data.percentage;
+            var GarbageLevelEnum = [{
+                min: Number.MIN_VALUE,
+                max: 50,
+                level: 'red',
+                description: 'Satisfaction with waste disposal is low.'
+            }, {
+                min: 50,
+                max: 75,
+                level: 'orange',
+                description: 'Satisfaction with waste disposal is medium.'
+            }, {
+                min: 75,
+                max: 100,
+                level: 'green',
+                description: 'Population is satisified with waste disposal.'
+            }];
+
+            var GarbageLevel = null;
+            GarbageLevelEnum.forEach(function(level) {
+                if(level.min < garbage && level.max >= garbage) {
+                    GarbageLevel = angular.copy(level);
+                }
+            });
+
             return {
                 id: 'garbage',
-                data: {},
+                data: {
+                    value: garbage,
+                    level: GarbageLevel.level,
+                    label: GarbageLevel.label,
+                    description: GarbageLevel.description,
+                    measurement: '%'
+                },
                 indicators: []
             }
         }
         function setTemperatureEnvironment(data) {
+            var temperature = data.iaqi.t.v;
+
+            var TemperatureLevelEnum = [{
+                min: Number.MIN_VALUE,
+                max: -16,
+                level: 'red'
+            }, {
+                min: -16,
+                max: -11,
+                level: 'orange'
+            }, {
+                min: -11,
+                max: 10,
+                level: 'orange'
+            }, {
+                min: 10,
+                max: 27,
+                level: 'green'
+            }, {
+                min: 27,
+                max: 32,
+                level: 'orange'
+            }, {
+                min: 32,
+                max: 41,
+                level: 'orange'
+            }, {
+                min: 41,
+                max: 50,
+                level: 'red'
+            }, {
+                min: 50,
+                max: Number.MAX_VALUE,
+                level: 'red'
+            }];
+
+            var TemperatureLevel = null;
+            TemperatureLevelEnum.forEach(function(level) {
+                if(level.min < temperature && level.max >= temperature) {
+                    TemperatureLevel = angular.copy(level);
+                }
+            });
+
             return {
                 id: 'temperature',
-                data: {},
+                data: {
+                    value: temperature,
+                    level: TemperatureLevel.level,
+                    label: TemperatureLevel.label,
+                    description: TemperatureLevel.description,
+                    measurement: 'C'
+                },
                 indicators: []
             }
         }
         function setNoiseEnvironment(data) {
+            var noise = data.db;
+            var NoiseLevelEnum = [{
+                min: Number.MIN_VALUE,
+                max: 10,
+                level: 'green',
+                description: 'Nature sounds'
+            }, {
+                min: 10,
+                max: 20,
+                level: 'green',
+                description: 'Library'
+            }, {
+                min: 20,
+                max: 40,
+                level: 'green',
+                description: 'Normal conversation'
+            }, {
+                min: 40,
+                max: 70,
+                level: 'orange',
+                description: 'Vacuum cleaner'
+            }, {
+                min: 70,
+                max: 90,
+                level: 'orange',
+                description: 'Street sound, crowds.'
+            }, {
+                min: 90,
+                max: 110,
+                level: 'red',
+                description: 'Rock concert'
+            }, {
+                min: 110,
+                max: 130,
+                level: 'red',
+                description: 'Jet airplane'
+            }, {
+                min: 130,
+                max: Number.MAX_VALUE,
+                level: 'red',
+                description: 'Painful'
+            }];
+
+            var NoiseLevel = null;
+            NoiseLevelEnum.forEach(function(level) {
+                if(level.min < noise && level.max >= noise) {
+                    NoiseLevel = angular.copy(level);
+                }
+            });
+
             return {
                 id: 'noise',
-                data: {},
+                data: {
+                    value: noise,
+                    level: NoiseLevel.level,
+                    label: NoiseLevel.label,
+                    description: NoiseLevel.description,
+                    measurement: 'dB'
+                },
                 indicators: []
             }
         }
         function setBiomeEnvironment(data) {
+            var biome = data.percentage;
+            var BiomeLevelEnum = [{
+                min: Number.MIN_VALUE,
+                max: 50,
+                level: 'red',
+                description: 'Population considers biome needs more diversity in the area.'
+            }, {
+                min: 50,
+                max: 75,
+                level: 'orange',
+                description: 'Population considers biome could be better but dont feel strong about it.'
+            }, {
+                min: 75,
+                max: 100,
+                level: 'green',
+                description: 'Population considers biome levels are adequate.'
+            }];
+
+            var BiomeLevel = null;
+            BiomeLevelEnum.forEach(function(level) {
+                if(level.min < biome && level.max >= biome) {
+                    BiomeLevel = angular.copy(level);
+                }
+            });
+
             return {
                 id: 'biome',
-                data: {},
+                data: {
+                    value: biome,
+                    level: BiomeLevel.level,
+                    label: BiomeLevel.label,
+                    description: BiomeLevel.description,
+                    measurement: '%'
+                },
                 indicators: []
             }
         }
@@ -316,18 +579,18 @@
 
             var queries = [];
 
-            queries.push($http.get('http://api.waqi.info/feed/here/?token=f61c3feb0506d4e261547951c28f7cae3fa1fcc7'));
+            queries.push($http.get('https://api.waqi.info/feed/here/?token=f61c3feb0506d4e261547951c28f7cae3fa1fcc7'));
 
             $q.allSettled(queries)
                 .then(function (response) {
                     var getAirData = response[0];
 
                     self.data.environments[0] = getAirData && getAirData.status == 200 ? setAirEnvironment(getAirData.data.data) : null;
-                    self.data.environments[1] = setWaterEnvironment({});
-                    self.data.environments[2] = setGarbageEnvironment({});
-                    self.data.environments[3] = setTemperatureEnvironment({});
-                    self.data.environments[4] = setNoiseEnvironment({});
-                    self.data.environments[5] = setBiomeEnvironment({});
+                    self.data.environments[1] = setWaterEnvironment({ph: getRandomArbitrary(0, 10).toFixed(1) });
+                    self.data.environments[2] = setGarbageEnvironment({percentage: getRandomArbitrary(0, 100).toFixed(2)});
+                    self.data.environments[3] = getAirData && getAirData.status == 200 ? setTemperatureEnvironment(getAirData.data.data) : null;
+                    self.data.environments[4] = setNoiseEnvironment({db: getRandomInt(0, 100)});
+                    self.data.environments[5] = setBiomeEnvironment({percentage: getRandomArbitrary(0, 100).toFixed(2)});
                 })
                 .then(function() {
                     setActiveEnvironment(self.data.environments[0]);

@@ -47,7 +47,7 @@
         <md-grid-list ng-if="dVM.data.selectedEnvironment.improvements.length" flex md-cols="3" md-gutter="1em" md-row-height="200">
             <md-grid-tile ng-repeat="improvement in dVM.data.selectedEnvironment.improvements">
                 <div class="improvement-item" layout="column" layout-align="start center" layout-fill>
-                    <img src="{{ improvement.id + '.png'}}" />
+                    <img src="{{ 'modules/dashboard/assets/preventions/' + improvement.id + '.png'}}" />
                     <div class="improvement-description" layout-margin>{{ improvement.description }}</div>
                 </div>
             </md-grid-tile>
