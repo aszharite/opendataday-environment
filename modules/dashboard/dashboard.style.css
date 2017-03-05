@@ -1,3 +1,7 @@
+body {
+    background-color: rgb(224,224,224);
+}
+
 .icon-container,
 .icon-container svg {
     width: auto;

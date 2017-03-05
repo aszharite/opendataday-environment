@@ -37,11 +37,11 @@
 
             var marker = new google.maps.Marker({
                 position: pos,
-                map: dashboard.map,
+                map: map,
                 title: 'Uluru (Ayers Rock)'
               });
 
-            dashboard.map.setCenter(pos);
+            map.setCenter(pos);
           }, function() {
             console.log('error while querying for location');
           });
